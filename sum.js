@@ -17,14 +17,14 @@ function sum1(n) {
   console.log(sum1(5))
 
 // 壓力測試
-console.time('SUM1');
+console.time('SUM1')
 for (let i = 1; i <= 10000; i++) {
-  sum1(100000);
+  sum1(100000)
 }
-console.timeEnd('SUM1');
+console.timeEnd('SUM1')
 
-console.time('SUM2');
+console.time('SUM2')
 for (let i = 1; i <= 10000; i++) {
-  sum2(100000);
+  sum2(100000)
 }
-console.timeEnd('SUM2');
+console.timeEnd('SUM2')
