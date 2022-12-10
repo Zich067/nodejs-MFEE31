@@ -1,8 +1,7 @@
 const fs = require('fs')
-const { resolve } = require('path')
 
 // error-first callback
-// fs.readFile('test.txt', 'utf-8', (err, data) => {
+// fs.readFile('test.txt', 'utf-8', (err, data) => {               
 //   if (err) {
 //     // 如果 err 有值，表示有錯誤發生
 //     // 這裡應該要處理錯誤
