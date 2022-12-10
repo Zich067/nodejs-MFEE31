@@ -14,11 +14,11 @@ const { resolve } = require('path')
 // })
 
 let p = new Promise((resolve, reject) => {
-    fs.readFile('test.txt', 'utf-8', (err, data) => {
-        if (err) {
-          console.error('發生錯誤了', err)
+    fs.readFile('test.txt', 'utf-8', (error, data) => {
+        if (error) {
+            reject(error)
         } else {
-          console.log('成功讀到資料:', data)
+            resolve(data)
         }
       })
 })
