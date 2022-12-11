@@ -30,6 +30,8 @@ let p = new Promise((resolve, reject) => {
 // doJob()
 
 //IIEF
+//(()=>{})()  ->最後一個() 為呼叫函式，立即呼叫有沒有名稱都沒關係
+
 (async () => {
     try {
       let data = await p
@@ -38,4 +40,17 @@ let p = new Promise((resolve, reject) => {
       console.error('catch 到的錯誤', e)
     }
   })();
+
+//-----------------------------------------
+//   //定義
+//   function test(參數1, 參數2){};
+//   //呼叫
+//   test();
+
+//   let test = function(){};
+//   test();
+
+//   (function test(參數1, 參數2){})();
+
+//   ((參數1, 參數2) => {})();
     
