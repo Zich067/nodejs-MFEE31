@@ -15,6 +15,11 @@ let pool = mysql2.createPool({
       });
 
 
+// 允許跨元存取
+// 預設是全部開放
+// 也可以做部分限制，參考 npm cors的文件
+const cors = require('cors');
+app.use(cors());
 
 
 // middleware => pipeline pattern
@@ -61,7 +66,7 @@ app.get('/api',(req, res, next) =>{
 app.get('/api/stocks',async(req, res, next)=>{
     // let results = await connection.query('SELECT * FROM stocks')
     // let data =results[0];
-
+    console.log('這裡是/api/stocks')
     let [data]=await pool.query('SELECT * FROM stocks')
     res.json(data)
 });
