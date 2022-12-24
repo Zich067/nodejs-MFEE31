@@ -27,7 +27,7 @@ const Navbar = () => {
           關於
         </NavLink>
         {/* 登入後顯示的 */}
-        Hi, 賴小賴
+        Hi, ZiCh
         <img style={{ width: '80px' }} />
         <Link
           to="/about"

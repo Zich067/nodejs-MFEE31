@@ -1,7 +1,20 @@
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
+import { useParams} from 'react-router-dom';
+
+import axios from 'axios';
 
 const StockDetails = () => {
   const [error, setError] = useState(null);
+  const { stockId } = useParams();
+  const [data, setData] = useState([])
+  useEffect(() => {
+    async function getStocks(){
+      let response = await axios.get(`http://localhost:3001/api/stocks/${stockId}`);
+      setData(response.data);
+    }
+    getStocks()
+  },[])
+  console.log('StockDetail',stockId)
 
   return (
     <div>
@@ -25,33 +38,40 @@ const StockDetails = () => {
         </li>
       </ul>
       目前在第 1 頁
-      <div className="bg-white bg-gray-50 p-6 rounded-lg shadow m-6">
-        <h2 className="text-2xl font-bold mb-2 text-gray-800">日期：date</h2>
+      
+      {data.map((item)=>{
+            return (
+              <div key={item.date} className="bg-white bg-gray-50 p-6 rounded-lg shadow m-6">
+        <h2 className="text-2xl font-bold mb-2 text-gray-800">日期：{item.date}</h2>
+
         <h2 className="text-2xl font-bold mb-2 text-gray-800">
-          成交金額：amount
+          成交金額：{item.amount}
         </h2>
         <h2 className="text-2xl font-bold mb-2 text-gray-800">
-          成交股數： volume
+          成交股數：{item.volume}
         </h2>
         <h2 className="text-2xl font-bold mb-2 text-gray-800">
-          開盤價：open_price
+          開盤價：{item.open_price}
         </h2>
         <h2 className="text-2xl font-bold mb-2 text-gray-800">
-          收盤價：close_price
+          收盤價：{item.close_price}
         </h2>
         <h2 className="text-2xl font-bold mb-2 text-gray-800">
-          漲跌價差：delta_price
+          漲跌價差：{item.delta_price}
         </h2>
         <h2 className="text-2xl font-bold mb-2 text-gray-800">
-          最高價：high_price
+          最高價：{item.high_price}
         </h2>
         <h2 className="text-2xl font-bold mb-2 text-gray-800">
-          最低價：low_price
+          最低價：{item.low_price}
         </h2>
         <h2 className="text-2xl font-bold mb-2 text-gray-800">
-          成交筆數：transactions
+          成交筆數：{item.transactions}
         </h2>
-      </div>
+        </div>
+        )
+      })}
+      
     </div>
   );
 };
