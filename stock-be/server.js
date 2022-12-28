@@ -14,7 +14,7 @@ let pool = mysql2.createPool({
         connectionLimit:10,
       });
 
-
+app.use(express.json());
 // 允許跨元存取
 // 預設是全部開放
 // 也可以做部分限制，參考 npm cors的文件
@@ -35,7 +35,7 @@ app.use('/2048',express.static('./static'));
 app.use((req ,res, next) => {
     console.log('這裡是第一個中間件A');
     // 可以自行創立任意改變
-    req.mfree31='水母班';
+    req.mfee31='水母班';
     next();
     // res.send('這裡是 A 中間件');
 });
@@ -51,9 +51,8 @@ app.use((req ,res, next) => {
 // get,post,put,patch,delete,option,head
 // 路由中間件
 app.get('/',(req,res, next)=>{
-    console.log('這是頁面2',req.mfree31,req.dt);
+    console.log('這是頁面2',req.mfee31,req.dt);
     res.send('Hello Express 9 首頁喔~~');
-  
 });
 
 app.get('/api',(req, res, next) =>{
@@ -68,7 +67,7 @@ app.get('/api/stocks',async(req, res, next)=>{
     // let data =results[0];
     console.log('這裡是/api/stocks')
     let [data]=await pool.query('SELECT * FROM stocks')
-    res.json(data)
+    res.json(data);
 });
 
 //localhost:3001/api/stocks/2330
@@ -84,6 +83,13 @@ app.get('/api/stocks/:stockId',async(req, res, next) => {
     let [data] = await pool.query('SELECT * FROM stock_prices WHERE stock_id=?',[req.params.stockId]);
     res.json(data);
 });
+
+app.post('/api/stocks',async(req,res)=> {
+    console.log('POST /api/stocks',req.body);
+    let [data] = await pool.query('INSERT INTO stocks (id, name) VALUES (?,?)', [req.body.stockId, req.body.stockName]);
+    // console.log(results)
+    res.json(data);
+})
 
 app.use((req, res, next) => {
     console.log('這裡是的一個中間件 C');
