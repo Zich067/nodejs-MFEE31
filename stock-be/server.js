@@ -3,16 +3,7 @@ const express = require('express');
 const app = express();
 
 require ('dotenv').config();
-const mysql2 = require('mysql2/promise');
-let pool = mysql2.createPool({   
-        host:process.env.DB_HOST,
-        port:process.env.DB_PORT,
-        user:process.env.DB_USER,
-        password:process.env.DB_PWD,
-        database:process.env.DB_DATABASE,
-        // 限制pool連線數上限
-        connectionLimit:10,
-      });
+const pool = require('./utils/db');
 
 app.use(express.json());
 // 允許跨元存取
@@ -30,6 +21,10 @@ app.use(cors());
 // app.use(express.static('./static'))
 
 app.use('/2048',express.static('./static'));
+
+// 處理使用者註冊時上傳網址
+// 圖片位置http://localhost:3001/public/uploads/1673160962828.png
+app.use('/public',express.static('./public'));
 
 // 中間件
 app.use((req ,res, next) => {
@@ -62,34 +57,11 @@ app.get('/api',(req, res, next) =>{
     });  
 });
 
-app.get('/api/stocks',async(req, res, next)=>{
-    // let results = await connection.query('SELECT * FROM stocks')
-    // let data =results[0];
-    console.log('這裡是/api/stocks')
-    let [data]=await pool.query('SELECT * FROM stocks')
-    res.json(data);
-});
+const stockRouter = require('./routers/stockRouter');
+app.use('/api/stocks',stockRouter);
 
-//localhost:3001/api/stocks/2330
-// req.params.stockIs => 2330
-// SELECT * FROM stock_prices WHERE stock_id=2330
-
-//localhost:3001/api/stocks/1234
-// req.params.stockIs => 1324 or 1=1;--
-// SELECT * FROM stock_prices WHERE stock_id=1234
-
-app.get('/api/stocks/:stockId',async(req, res, next) => {
-    console.log('/api/stocks/:stockId=>',req.params.stockId);
-    let [data] = await pool.query('SELECT * FROM stock_prices WHERE stock_id=?',[req.params.stockId]);
-    res.json(data);
-});
-
-app.post('/api/stocks',async(req,res)=> {
-    console.log('POST /api/stocks',req.body);
-    let [data] = await pool.query('INSERT INTO stocks (id, name) VALUES (?,?)', [req.body.stockId, req.body.stockName]);
-    // console.log(results)
-    res.json(data);
-})
+const authRouter = require('./routers/authRouter');
+app.use('/api/auth/',authRouter);
 
 app.use((req, res, next) => {
     console.log('這裡是的一個中間件 C');
